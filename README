@@ -1,0 +1,15 @@
+ComponentKit is useful if you need something like this:
+
+
+  ------------------------------------------------------------------------
+  |          | Position | Health | Flying | Fire Breathing | Combustible |
+  ------------------------------------------------------------------------
+  | "Player" |    x     |   X    |        |                |      x      |
+  | "Dragon" |    x     |   X    |   x    |       x        |             |
+  ------------------------------------------------------------------------
+       ^                             ^
+    Unique entities      composed of arbitrary behaviors.
+
+
+
+Copyright 2012 Jacob H. Hansen.
