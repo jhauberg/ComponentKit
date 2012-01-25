@@ -39,6 +39,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Component.cs" />
     <Compile Include="Model\DependencyComponent.cs" />
     <Compile Include="Model\ComponentStateEventArgs.cs" />
     <Compile Include="ISyncState.cs" />

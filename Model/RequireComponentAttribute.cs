@@ -7,7 +7,7 @@ using System;
 
 namespace ComponentKit.Model {
     /// <summary>
-    /// Indicates that a `Component` field should be treated as a dependency.
+    /// Indicates that an `IComponent` field should be treated as a dependency.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public sealed class RequireComponentAttribute : Attribute {

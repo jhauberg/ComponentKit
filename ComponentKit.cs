@@ -1,5 +1,5 @@
 ﻿/// Copyright 2012 Jacob H. Hansen.  
-/// *This project and all source code is subject to the terms and conditions defined in the ['License'](http://github.com/shrt/ComponentKit/LICENSE).*
+/// *This project and all source code is subject to the terms and conditions defined in the ['License'](https://github.com/shrt/ComponentKit/blob/master/LICENSE).*
 
 /// ###What it is
 /// 
