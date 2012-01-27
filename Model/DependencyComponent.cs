@@ -1,6 +1,7 @@
 ﻿/// ###TL;DR..
 /// 
-/// The `DependencyComponent` is a `Component` that is aware of its dependencies, and will automatically attempt to inject them during synchronization.
+/// The `DependencyComponent` is a `Component` that is aware of its dependencies, 
+/// and will automatically attempt to inject them during synchronization.
 /// 
 
 /// ##Source
@@ -18,9 +19,13 @@ namespace ComponentKit.Model {
             new Dictionary<FieldInfo, RequireComponentAttribute>();
 
         protected DependencyComponent() {
-            /// Since the base constructor is guaranteed to be called (even if implemented in a subclass without calling `base()`), this opportunity is used to immediately discover the required dependencies.
+            /// Since the base constructor is guaranteed to be called (even if 
+            /// implemented in a subclass without calling `base()`), this opportunity 
+            /// is used to immediately discover the required dependencies.
             FindDependencies();
-            /// > Note that for dependency injection to work, all components must be instantiable and have an empty constructor. However, it is not necessary to implement one.
+            /// > Note that for dependency injection to work, all components must 
+            /// be instantiable and have an empty constructor. However, it is not 
+            /// necessary to implement one.
         }
 
         /// <summary>
@@ -29,16 +34,20 @@ namespace ComponentKit.Model {
         void FindDependencies() {
             _dependencies.Clear();
 
-            /// > It wouldn't be complete insanity to ditch the attributing entirely and just consider all `IComponent`-types as dependencies. 
-            /// But, it *would* ultimately be an assumption, and it could very well lead to some *just what exactly is going on behind the scenes?*-confusion.
+            /// > It wouldn't be complete insanity to ditch the attributing entirely 
+            ///   and just consider all `IComponent`-types as dependencies. 
+            /// But, it *would* ultimately be an assumption, and it could very well 
+            /// lead to some *just what exactly is going on behind the scenes?*-confusion.
             FieldInfo[] fields = GetType().GetFields(
                 BindingFlags.Instance |
                 BindingFlags.Public |
                 BindingFlags.NonPublic);
 
             foreach (FieldInfo field in fields) {
-                foreach (RequireComponentAttribute dependency in field.GetCustomAttributes(typeof(RequireComponentAttribute), false)) {
-                    Type[] matchingInterfaces = field.FieldType.FindInterfaces(IsTypeEqualToName, "ComponentKit.IComponent");
+                foreach (RequireComponentAttribute dependency in 
+                            field.GetCustomAttributes(typeof(RequireComponentAttribute), false)) {
+                    Type[] matchingInterfaces = field.FieldType.FindInterfaces(IsTypeEqualToName, 
+                                                                               "ComponentKit.IComponent");
 
                     if (matchingInterfaces == null || matchingInterfaces.Length == 0) {
                         throw new InvalidOperationException(
@@ -92,7 +101,8 @@ namespace ComponentKit.Model {
                 /// Determines which entity the dependency should be grabbed from. 
                 IEntityRecord record =
                     (dependency.FromRecordNamed != null) ?
-                        /// The dependency will **not** be injected if the specified entity is not registered at the time.
+                        /// The dependency will **not** be injected if the specified entity 
+                        /// is not registered at the time.
                         Entity.Find(dependency.FromRecordNamed, Record.Registry) :
                         Record;
 
