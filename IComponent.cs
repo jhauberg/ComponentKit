@@ -20,4 +20,5 @@ namespace ComponentKit {
         void Receive<T>(string message, T data);
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

@@ -39,6 +39,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IEntityDefinitionCollection.cs" />
     <Compile Include="Model\Component.cs" />
     <Compile Include="Model\DependencyComponent.cs" />
     <Compile Include="Model\ComponentStateEventArgs.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="ComponentSyncEventArgs.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="EntityEventArgs.cs" />
+    <Compile Include="Model\EntityDefinitions.cs" />
     <Compile Include="Model\EntityRecord.cs" />
     <Compile Include="Model\EntityRecordStore.cs" />
     <Compile Include="Model\EntityRegistry.cs" />

@@ -18,7 +18,7 @@ namespace ComponentKit {
     /// <summary>
     /// Defines a single and uniquely identifiable entity.
     /// </summary>
-    public interface IEntityRecord : ISynchronizable, IEquatable<IEntityRecord> {
+    public interface IEntityRecord : ISynchronizable, IEquatable<IEntityRecord>, IEnumerable<IComponent> {
         /// <summary>
         /// Gets the unique name identifier for the entity.
         /// </summary>
@@ -51,4 +51,5 @@ namespace ComponentKit {
         void Notify<T>(string message, T data);
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

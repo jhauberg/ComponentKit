@@ -16,4 +16,5 @@ namespace ComponentKit {
         bool IsOutOfSync { get; }
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

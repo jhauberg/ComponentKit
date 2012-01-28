@@ -16,4 +16,5 @@ namespace ComponentKit {
         void Synchronize();
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

@@ -4,15 +4,18 @@
 
 /// ####Processing
 /// 
-/// Triggers can be used to intercept when components are attached/dettached from entities, which makes it easy to add special processing of specific types of components.
+/// Triggers can be used to intercept when components are attached/dettached from entities, 
+/// which makes it easy to add special processing of specific types of components.
 /// 
 /// ####Staying n'sync
 /// 
-/// A component becomes out-of-sync when it is no longer attached to an `IEntityRecord`. Triggers, however, are not guaranteed to be notified of this immediately. 
-/// The default implementation of `IEntityRecordCollection` only runs the triggers during a synchronization operation.
+/// A component becomes out-of-sync when it is no longer attached to an `IEntityRecord`. Triggers, however, 
+/// are not guaranteed to be notified of this immediately. The default implementation of `IEntityRecordCollection` 
+/// only runs the triggers during a synchronization operation.
 
 /// ##Source
 using System;
+using System.Globalization;
 
 namespace ComponentKit.Model {
     /// <summary>
@@ -30,7 +33,8 @@ namespace ComponentKit.Model {
         /// Gets or sets the entity that this component is currently attached to.
         /// </summary>
         public IEntityRecord Record {
-            /// > The component is in an inconsistent state when the **Record** is not `null` but does not have the component attached to it.
+            /// > The component is in an inconsistent state when the **Record** is not `null` 
+            /// but does not have the component attached to it.
             get {
                 return _record;
             }
@@ -48,7 +52,8 @@ namespace ComponentKit.Model {
                         Synchronize();
                     }
                 } else {
-                    throw new InvalidOperationException("Component has to be synchronized before further changes can happen.");
+                    throw new InvalidOperationException(
+                        "Component has to be synchronized before further changes can happen.");
                 }
             }
         }
@@ -99,6 +104,48 @@ namespace ComponentKit.Model {
         /// Receives a message from a containing arbitrary data.
         /// </summary>
         public virtual void Receive<T>(string message, T data) { }
+
+        /// <summary>
+        /// Helper method to create an instance of a specified type, and casting it to `IComponent`
+        /// </summary>
+        public static IComponent Create(Type type) {
+            IComponent result = null;
+
+            try {
+                result = Activator.CreateInstance(type) as IComponent;
+            } catch (MissingMethodException) {
+                throw new MissingMethodException(String.Format(CultureInfo.CurrentCulture,
+                    "The component type '{0}' does not provide a parameter-less constructor.", type.ToString()));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Determines whether the given type implements the `IComponent` interface.
+        /// </summary>
+        public static bool IsComponent(Type type) {
+            Type[] matchingInterfaces = type.FindInterfaces(
+                IsTypeEqualToName, "ComponentKit.IComponent");
+
+            if (matchingInterfaces != null && matchingInterfaces.Length != 0) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the given string filter is equal to the name of the type.
+        /// </summary>
+        static bool IsTypeEqualToName(Type m, object filterCriteria) {
+            if (filterCriteria is string) {
+                return m.FullName == (string)filterCriteria;
+            }
+
+            return false;
+        }
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

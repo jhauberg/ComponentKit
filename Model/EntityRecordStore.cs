@@ -306,11 +306,12 @@ namespace ComponentKit.Model {
         public IEnumerator<IEntityRecord> GetEnumerator() {
             return _records.Keys.GetEnumerator();
         }
-
+        
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-            return _records.Keys.GetEnumerator();
+            return GetEnumerator();
         }
-
+        
+        /// Stores all components that have changed sync state since last synchronization operation; i.e. components that have been added or removed.
         List<IComponent> _desynchronizedComponents =
             new List<IComponent>();
 

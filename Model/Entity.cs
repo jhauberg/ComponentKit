@@ -11,6 +11,9 @@ namespace ComponentKit.Model {
     /// Provides methods for acquiring and getting rid of entities.
     /// </summary>
     public static class Entity {
+        static readonly IEntityDefinitionCollection<string> _definitions = 
+            new EntityDefinitions();
+
         /// ###Manipulation
         
         /// <summary>
@@ -82,17 +85,54 @@ namespace ComponentKit.Model {
                 new EntityRecord(name));
         }
 
+        /// <summary>
+        /// Defines a range of components by name. 
+        /// The definition is only created if at least one valid component type is specified.
+        /// </summary>
+        public static void Define(string definition, params Type[] componentTypes) {
+            _definitions.Define(definition, componentTypes);
+        }
+
+        /// <summary>
+        /// Defines a range of components by name, with the option to include a previously defined range. 
+        /// The definition is only established if at least one valid component type is specified.
+        /// </summary>
+        public static void Define(string definition, string inheritFromDefinition, params Type[] types) {
+            _definitions.Define(definition, inheritFromDefinition, types);
+        }
+
+        /// <summary>
+        /// Removes the component definition for the given name.
+        /// </summary>
+        public static bool Undefine(string definition) {
+            return _definitions.Undefine(definition);
+        }
+
+        /// <summary>
+        /// Creates an entity from the specified definition and registers it in the active registry.
+        /// </summary>
+        public static IEntityRecord CreateFromDefinition(string definition) {
+            return _definitions.Make(definition);
+        }
+
+        /// <summary>
+        /// Creates an entity from the specified definition and registers it in the active registry.
+        /// </summary>
+        public static IEntityRecord CreateFromDefinition(string definition, string name) {
+            return _definitions.Make(definition, Create(name));
+        }
+
         /// ###Retrieval
 
         /// <summary>
-        /// Attempts to find the entity that matches the specified name in the active registry.
+        /// Attempts to find the entity that matches the specified name in the active registry. Returns `null` if none was found.
         /// </summary>
         public static IEntityRecord Find(string name) {
             return Find(name, EntityRegistry.Current);
         }
         
         /// <summary>
-        /// Attempts to find the entity that matches the specified name in a registry.
+        /// Attempts to find the entity that matches the specified name in a registry. Returns `null` if none was found.
         /// </summary>
         public static IEntityRecord Find(string name, IEntityRecordCollection registry) {
             IEntityRecord record = new EntityRecord(name, registry);

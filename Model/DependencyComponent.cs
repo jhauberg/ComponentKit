@@ -7,8 +7,8 @@
 /// ##Source
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
+using System.Globalization;
 
 namespace ComponentKit.Model {
     /// <summary>
@@ -46,12 +46,19 @@ namespace ComponentKit.Model {
             foreach (FieldInfo field in fields) {
                 foreach (RequireComponentAttribute dependency in 
                             field.GetCustomAttributes(typeof(RequireComponentAttribute), false)) {
-                    Type[] matchingInterfaces = field.FieldType.FindInterfaces(IsTypeEqualToName, 
-                                                                               "ComponentKit.IComponent");
+                    Type componentType = field.FieldType;
 
-                    if (matchingInterfaces == null || matchingInterfaces.Length == 0) {
+                    if (IsComponent(componentType)) {
+                        if (componentType.GetConstructor(Type.EmptyTypes) == null) {
+                            throw new InvalidOperationException(
+                                String.Format(CultureInfo.InvariantCulture,
+                                    "This field can not be marked as a dependency because its type does not provide a parameter-less constructor.",
+                                    field.DeclaringType.ToString() + "." + field.Name));
+                        }
+                    } else {
                         throw new InvalidOperationException(
-                            String.Format(CultureInfo.InvariantCulture, "This field can not be marked as a dependency because its type does not implement 'IComponent'.", 
+                            String.Format(CultureInfo.InvariantCulture,
+                                "This field can not be marked as a dependency because its type does not implement 'IComponent'.",
                                 field.DeclaringType.ToString() + "." + field.Name));
                     }
 
@@ -64,17 +71,6 @@ namespace ComponentKit.Model {
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether the given string filter is equal to the name of the type.
-        /// </summary>
-        bool IsTypeEqualToName(Type m, object filterCriteria) {
-            if (filterCriteria is string) {
-                return m.Name == (string)filterCriteria;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -132,6 +128,10 @@ namespace ComponentKit.Model {
             if (dependency == null) {
                 dependency = Create(componentType);
 
+                if (dependency == null) {
+                    return;
+                }
+
                 record.Add(dependency);
             }
 
@@ -162,22 +162,7 @@ namespace ComponentKit.Model {
                 field.SetValue(this, null);
             }
         }
-
-        /// <summary>
-        /// Helper method to create an instance of a specified type, and casting it to `IComponent`
-        /// </summary>
-        static IComponent Create(Type type) {
-            IComponent result = null;
-
-            try {
-                result = Activator.CreateInstance(type) as IComponent;
-            } catch (MissingMethodException) {
-                throw new MissingMethodException(String.Format(CultureInfo.CurrentCulture,
-                    "The component type '{0}' does not implement an empty constructor.", type.ToString()));
-            }
-
-            return result;
-        }
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

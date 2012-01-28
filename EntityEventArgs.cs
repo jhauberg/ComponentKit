@@ -26,4 +26,5 @@ namespace ComponentKit {
         }
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.

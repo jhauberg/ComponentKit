@@ -1,12 +1,14 @@
 ﻿/// ###TL;DR..
 
-/// This concrete implementation of `IEntityRecord` is a **struct**, and uses its **Name** property to determine equality.
+/// This concrete implementation of `IEntityRecord` is a **struct**, and uses its **Name** property 
+/// to determine equality.
 /// 
 /// The fact that it is a struct means that instances can be created on the fly pretty much without penalty.
 
 /// ##Source
 using System;
 using System.Dynamic;
+using System.Collections.Generic;
 
 namespace ComponentKit.Model {
     /// <summary>
@@ -50,14 +52,14 @@ namespace ComponentKit.Model {
                 return _name;
             }
 
-            /// The name is only allowed to be set once. This is necessary, because since `EntityRecord` is a struct, it will always have an empty constructor.
-            /// And when this is used, the instance becomes useless without being able to ever have a **Name**.
+            /// The name is only allowed to be set once. Because the name is used for determining identity, 
+            /// being able to mutate it would cause leaks in the `Dictionaries` containing the entities.
             set {
                 if (_name == null) {
                     _name = value;
                 } else {
-                    /// > If you want to rename an entity, it's usually done by simply moving the components into a new one.
-                    /// Since the name is used for determining identity, being able to mutate it would cause leaks in the `Dictionaries` containing the entities.
+                    /// > If you want to rename an entity, it's usually done by simply
+                    /// moving the component into a new one.
                     throw new InvalidOperationException();
                 }
             }
@@ -74,7 +76,8 @@ namespace ComponentKit.Model {
             }
 
             set {
-                /// When set to a different registry, this entity will automatically be registered into the new one when synchronized.
+                /// When set to a different registry, this entity will automatically be registered into the new 
+                /// one when synchronized.
                 if (_registry != value) {
                     /// And of course, it is also unregistered from the previous registry if necessary..
                     if (_registry != null || (value == null && _registry != null)) {
@@ -91,8 +94,8 @@ namespace ComponentKit.Model {
         /// Creates a new entity with the specified name.
         /// </summary>
         /// <remarks>
-        /// > The entity will be out-of-sync until it has a registry, so this constructor is usually only used when you need to query the
-        /// registry for a certain entity (since its name == its identity).
+        /// > The entity will be out-of-sync until it has a registry, so this constructor is usually only used 
+        /// when you need to query the registry for a certain entity (since its name == its identity).
         /// </remarks>
         public EntityRecord(string name)
             : this(name, null) { }
@@ -157,8 +160,10 @@ namespace ComponentKit.Model {
             }
         }
 
-        /// Unfortunately, overloading the operators will not work for comparing 2 instances of `IEntityRecord` (which is the exposed interface). 
-        /// It sucks, but because this is a compile-time feature, it will only work when comparing instances that have been cast to `EntityRecord`. This is no good.
+        /// Unfortunately, overloading the operators will not work for comparing 2 instances of `IEntityRecord` 
+        /// (which is the exposed interface). 
+        /// It sucks, but because this is a compile-time feature, it will only work when comparing instances 
+        /// that have been cast to `EntityRecord`. Not great.
         public static bool operator ==(EntityRecord left, EntityRecord right) {
             if (Object.ReferenceEquals(left, right)) {
                 return true;
@@ -169,6 +174,18 @@ namespace ComponentKit.Model {
 
         public static bool operator !=(EntityRecord left, EntityRecord right) {
             return !(left == right);
+        }
+
+        public IEnumerator<IComponent> GetEnumerator() {
+            if (Registry == null) {
+                return null;
+            }
+
+            return Registry.GetComponents(this).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }

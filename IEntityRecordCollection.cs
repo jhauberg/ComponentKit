@@ -93,4 +93,5 @@ namespace ComponentKit {
         IEnumerable<IComponent> this[IEntityRecord entity] { get; }
     }
 }
+
 /// Copyright 2012 Jacob H. Hansen.
