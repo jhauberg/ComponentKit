@@ -1,6 +1,6 @@
 ﻿/// ###TL;DR..
 /// 
-/// Too bad, because this part is missing right now ^_^
+/// Convenience methods to reduce the amount of necessary boilerplate code.
 
 /// ##Source
 using System;
@@ -170,7 +170,7 @@ namespace ComponentKit.Model {
     /// <summary>
     /// Convenient methods for dealing with entities.
     /// </summary>
-    public static class EntityExtensions {
+    public static class EntityRecordExtensions {
         /// ###Manipulation
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity) where T : IComponent {
+        public static T GetComponent<T>(this IEntityRecord entity) where T : class, IComponent {
             return entity.Registry == null ?
                 default(T) :
                 entity.Registry.GetComponent<T>(entity);
@@ -214,7 +214,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity, T component) where T : IComponent {
+        public static T GetComponent<T>(this IEntityRecord entity, T component) where T : class, IComponent {
             return entity.Registry == null ?
                 default(T) :
                 entity.Registry.GetComponent(entity, component);
@@ -223,7 +223,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// If `allowingDerivedTypes` is `true`, returns any component that is either a subclass of, or is, the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity, T component, bool allowingDerivedTypes) where T : IComponent {
+        public static T GetComponent<T>(this IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent {
             return entity.Registry == null ?
                 default(T) :
                 entity.Registry.GetComponent(entity, component, allowingDerivedTypes);
@@ -237,12 +237,24 @@ namespace ComponentKit.Model {
                 null :
                 entity.Registry.GetComponents(entity);
         }
+        /*
+        public static IEnumerable<T> GetComponents<T>(this IEntityRecord entity) where T : class, IComponent {
+            IList<T> components = new List<T>();
 
-        public static bool HasComponent<T>(this IEntityRecord entity) where T : IComponent {
+            foreach (IComponent component in entity) {
+                if (component is T) {
+                    components.Add(component as T);
+                }
+            }
+
+            return components;
+        }
+        */
+        public static bool HasComponent<T>(this IEntityRecord entity) where T : class, IComponent {
             return GetComponent<T>(entity) != null;
         }
 
-        public static bool HasComponent<T>(this IEntityRecord entity, T component) where T : IComponent {
+        public static bool HasComponent<T>(this IEntityRecord entity, T component) where T : class, IComponent {
             return GetComponent<T>(entity, component) != null;
         }
     }

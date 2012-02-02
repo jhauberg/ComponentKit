@@ -1,8 +1,17 @@
-﻿using System;
+﻿/// ###TL;DR..
+/// 
+/// Lets you group components together, so you can later spawn them all in one line.
+
+/// ##Source
+using System;
 using System.Collections.Generic;
 
 namespace ComponentKit {
-    internal interface IEntityDefinitionCollection<TEntityDefinition> : IEnumerable<TEntityDefinition> {
+    /// <summary>
+    /// Describes a set of unique entity compositions, each defined by `TEntityDefinition`.
+    /// </summary>
+    internal interface IEntityDefinitionCollection<TEntityDefinition> 
+        : IEnumerable<TEntityDefinition> {
         /// <summary>
         /// Defines a range of components by name.
         /// </summary>
@@ -29,3 +38,5 @@ namespace ComponentKit {
         IEntityRecord Make(TEntityDefinition definition, IEntityRecord entity);
     }
 }
+
+/// Copyright 2012 Jacob H. Hansen.

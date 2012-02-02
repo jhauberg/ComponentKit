@@ -169,7 +169,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity) where T : IComponent {
+        public T GetComponent<T>(IEntityRecord entity) where T : class, IComponent {
             T component = default(T);
 
             return GetComponent(entity, component);
@@ -178,7 +178,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity, T component) where T : IComponent {
+        public T GetComponent<T>(IEntityRecord entity, T component) where T : class, IComponent {
             if (entity == null) {
                 return default(T);
             }
@@ -253,7 +253,7 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns any component that is either a subclass of, or is, the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity, T component, bool allowingDerivedTypes) where T : IComponent {
+        public T GetComponent<T>(IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent {
             IDictionary<Type, IComponent> components = GetComponentsForRecord(entity);
 
             T result = default(T);

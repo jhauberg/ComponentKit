@@ -2,8 +2,6 @@
 
 /// This concrete implementation of `IEntityRecord` is a **struct**, and uses its **Name** property 
 /// to determine equality.
-/// 
-/// The fact that it is a struct means that instances can be created on the fly pretty much without penalty.
 
 /// ##Source
 using System;
@@ -186,6 +184,18 @@ namespace ComponentKit.Model {
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
             return GetEnumerator();
+        }
+
+        public override string ToString() {
+            string components = "";
+
+            foreach (IComponent component in this) {
+                components += String.Format("{0}{1}, ", component.IsOutOfSync ? "*" : "", component.GetType().Name);
+            }
+
+            components = components.Remove(components.Length - 2);
+
+            return String.Format("'{0}': {{ {1} }}", Name, components);
         }
     }
 }

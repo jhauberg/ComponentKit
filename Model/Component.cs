@@ -1,17 +1,17 @@
 ﻿/// ###TL;DR..
 /// 
-/// The `Component` is used to build custom behavior.
-
+/// The `Component` is sub-classed to build custom behavior.
+/// 
 /// ####Processing
 /// 
 /// Triggers can be used to intercept when components are attached/dettached from entities, 
-/// which makes it easy to add special processing of specific types of components.
+/// which makes it easy to add special processing for specific types of components.
 /// 
 /// ####Staying n'sync
 /// 
 /// A component becomes out-of-sync when it is no longer attached to an `IEntityRecord`. Triggers, however, 
-/// are not guaranteed to be notified of this immediately. The default implementation of `IEntityRecordCollection` 
-/// only runs the triggers during a synchronization operation.
+/// are not guaranteed to be notified of this immediately. For example, the default implementation of 
+/// `IEntityRecordCollection` only execute triggers during sync operations.
 
 /// ##Source
 using System;
@@ -44,16 +44,16 @@ namespace ComponentKit.Model {
                     _previousRecord != null &&
                     _previousRecord.HasComponent(this);
 
-                if (!requiresSynchronization) {
+                if (requiresSynchronization) {
+                    throw new InvalidOperationException(
+                        "Component has to be synchronized before further changes can happen.");
+                } else {
                     if (_record == null || !_record.Equals(value)) {
                         _previousRecord = _record;
                         _record = value;
 
                         Synchronize();
                     }
-                } else {
-                    throw new InvalidOperationException(
-                        "Component has to be synchronized before further changes can happen.");
                 }
             }
         }

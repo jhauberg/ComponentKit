@@ -1,6 +1,7 @@
 ﻿/// ###TL;DR..
 
-/// Too bad, because this part is missing right now ^_^
+/// Components and entities needed a way to communicate whether they had 
+/// changed and should be processed again.
 
 /// ##Source
 using System;

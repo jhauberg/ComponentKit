@@ -1,6 +1,6 @@
 ﻿/// ###TL;DR..
-
-/// Too bad, because this part is missing right now ^_^
+/// 
+/// When an event involves a specific entity, these are used.
 
 /// ##Source
 using System;

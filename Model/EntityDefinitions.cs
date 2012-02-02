@@ -1,4 +1,9 @@
-﻿using System;
+﻿/// ###TL;DR..
+/// 
+/// Definitions are like prefabs, or blueprints, except without default properties.
+
+/// ##Source
+using System;
 using System.Collections.Generic;
 
 namespace ComponentKit.Model {
@@ -33,7 +38,6 @@ namespace ComponentKit.Model {
             }
 
             foreach (Type type in types) {
-                // TODO: test whether type.GetConstructor works for subclasses - i don't see why it wouldn't, but to be sure
                 bool adheresToConstraints = 
                     Component.IsComponent(type) && 
                     type.GetConstructor(Type.EmptyTypes) != null &&
@@ -110,3 +114,5 @@ namespace ComponentKit.Model {
         }
     }
 }
+
+/// Copyright 2012 Jacob H. Hansen.

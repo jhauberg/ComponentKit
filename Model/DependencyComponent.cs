@@ -49,11 +49,13 @@ namespace ComponentKit.Model {
                     Type componentType = field.FieldType;
 
                     if (IsComponent(componentType)) {
-                        if (componentType.GetConstructor(Type.EmptyTypes) == null) {
-                            throw new InvalidOperationException(
-                                String.Format(CultureInfo.InvariantCulture,
-                                    "This field can not be marked as a dependency because its type does not provide a parameter-less constructor.",
-                                    field.DeclaringType.ToString() + "." + field.Name));
+                        if (dependency.Automatically) {
+                            if (componentType.GetConstructor(Type.EmptyTypes) == null) {
+                                throw new InvalidOperationException(
+                                    String.Format(CultureInfo.InvariantCulture,
+                                        "This field can not be marked as a dependency because its type does not provide a parameter-less constructor.",
+                                        field.DeclaringType.ToString() + "." + field.Name));
+                            }
                         }
                     } else {
                         throw new InvalidOperationException(
@@ -94,6 +96,10 @@ namespace ComponentKit.Model {
                 FieldInfo field = pair.Key;
                 RequireComponentAttribute dependency = pair.Value;
 
+                if (!dependency.Automatically) {
+                    continue;
+                }
+
                 /// Determines which entity the dependency should be grabbed from. 
                 IEntityRecord record =
                     (dependency.FromRecordNamed != null) ?
@@ -107,7 +113,8 @@ namespace ComponentKit.Model {
                 }
 
                 /// Immediately attempt injecting the component.
-                InjectDependency(field, record, allowingDerivedTypes: dependency.AllowDerivedTypes);
+                InjectDependency(field, record, 
+                    allowingDerivedTypes: dependency.AllowDerivedTypes);
             }
         }
 

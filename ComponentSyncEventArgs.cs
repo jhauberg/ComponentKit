@@ -1,9 +1,10 @@
 ﻿/// ###TL;DR..
-
-/// Too bad, because this part is missing right now ^_^
+/// 
+/// When a bunch of components requires processing from **trigger handlers**, these are used.
 
 /// ##Source
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ComponentKit {
@@ -26,6 +27,24 @@ namespace ComponentKit {
         public IEnumerable<IComponent> Components {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Retrieves all components that have been dettached.
+        /// </summary>
+        public IEnumerable<IComponent> DettachedComponents {
+            get {
+                return Components.Where(c => c.IsOutOfSync);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all components that have been attached.
+        /// </summary>
+        public IEnumerable<IComponent> AttachedComponents {
+            get {
+                return Components.Where(c => !c.IsOutOfSync);
+            }
         }
     }
 }

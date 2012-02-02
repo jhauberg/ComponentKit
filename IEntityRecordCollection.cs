@@ -64,15 +64,15 @@ namespace ComponentKit {
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        T GetComponent<T>(IEntityRecord entity) where T : IComponent;
+        T GetComponent<T>(IEntityRecord entity) where T : class, IComponent;
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        T GetComponent<T>(IEntityRecord entity, T component) where T : IComponent;
+        T GetComponent<T>(IEntityRecord entity, T component) where T : class, IComponent;
         /// <summary>
         /// Returns any component that is either a subclass of, or is, the specified type if it is attached to the entity.
         /// </summary>
-        T GetComponent<T>(IEntityRecord entity, T component, bool allowingDerivedTypes) where T : IComponent;
+        T GetComponent<T>(IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent;
 
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.

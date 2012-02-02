@@ -1,6 +1,6 @@
 ﻿/// ###TL;DR..
-
-/// Too bad, because this part is missing right now ^_^
+/// 
+/// A component only has one really important attribute. The parent entity.
 
 /// ##Source
 using System;
