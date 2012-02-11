@@ -176,28 +176,34 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Attaches a component to this entity.
         /// </summary>
-        public static void Add(this IEntityRecord entity, IComponent component) {
+        public static bool Add(this IEntityRecord entity, IComponent component) {
             if (entity.Registry != null) {
-                entity.Registry.Add(entity, component);
+                return entity.Registry.Add(entity, component);
             }
+
+            return false;
         }
 
         /// <summary>
         /// Dettaches a component from this entity.
         /// </summary>
         public static bool Remove(this IEntityRecord entity, IComponent component) {
-            return entity.Registry != null ?
-                entity.Registry.Remove(entity, component) :
-                false;
+            if (entity.Registry != null) {
+                return entity.Registry.Remove(entity, component);
+            }
+
+            return false;
         }
 
         /// <summary>
         /// Unregisters this entity from its registry.
         /// </summary>
         public static bool Drop(this IEntityRecord entity) {
-            return entity.Registry != null ?
-                entity.Registry.Drop(entity) :
-                false;
+            if (entity.Registry != null) {
+                return entity.Registry.Drop(entity);
+            }
+
+            return false;
         }
 
         /// ###Component retrieval
@@ -206,36 +212,44 @@ namespace ComponentKit.Model {
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
         public static T GetComponent<T>(this IEntityRecord entity) where T : class, IComponent {
-            return entity.Registry == null ?
-                default(T) :
-                entity.Registry.GetComponent<T>(entity);
+            if (entity.Registry != null) {
+                return entity.Registry.GetComponent<T>(entity);
+            }
+
+            return default(T);
         }
 
         /// <summary>
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
         public static T GetComponent<T>(this IEntityRecord entity, T component) where T : class, IComponent {
-            return entity.Registry == null ?
-                default(T) :
-                entity.Registry.GetComponent(entity, component);
+            if (entity.Registry != null) {
+                return entity.Registry.GetComponent(entity, component);
+            }
+
+            return default(T);
         }
 
         /// <summary>
         /// If `allowingDerivedTypes` is `true`, returns any component that is either a subclass of, or is, the specified type if it is attached to this entity.
         /// </summary>
         public static T GetComponent<T>(this IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent {
-            return entity.Registry == null ?
-                default(T) :
-                entity.Registry.GetComponent(entity, component, allowingDerivedTypes);
+            if (entity.Registry != null) {
+                return entity.Registry.GetComponent(entity, component, allowingDerivedTypes);
+            }
+            
+            return default(T);
         }
 
         /// <summary>
         /// Gets all components currently attached to this entity.
         /// </summary>
         public static IEnumerable<IComponent> GetComponents(this IEntityRecord entity) {
-            return entity.Registry == null ?
-                null :
-                entity.Registry.GetComponents(entity);
+            if (entity.Registry != null) {
+                return entity.Registry.GetComponents(entity);
+            }
+
+            return null;
         }
         /*
         public static IEnumerable<T> GetComponents<T>(this IEntityRecord entity) where T : class, IComponent {

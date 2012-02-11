@@ -29,7 +29,7 @@ namespace ComponentKit {
         /// <summary>
         /// Attaches the specified component to an entity.
         /// </summary>
-        void Add(IEntityRecord entity, IComponent component);
+        bool Add(IEntityRecord entity, IComponent component);
         /// <summary>
         /// Dettaches the specified component from an entity if possible, and returns `true` if it was successfully removed.
         /// </summary>

@@ -63,7 +63,8 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Attaches the specified component to an entity.
         /// </summary>
-        public void Add(IEntityRecord entity, IComponent component) {
+        public bool Add(IEntityRecord entity, IComponent component) {
+            bool componentSuccessfullyAttached = false;
             bool entityWasAlreadyRegistered = true;
 
             lock (_keyhole) {
@@ -98,6 +99,8 @@ namespace ComponentKit.Model {
                         }
 
                         PrepareComponentForSynchronization(component);
+
+                        componentSuccessfullyAttached = true;
                     }
                 }
             }
@@ -105,6 +108,8 @@ namespace ComponentKit.Model {
             if (!entityWasAlreadyRegistered) {
                 OnEntered(entity);
             }
+
+            return componentSuccessfullyAttached;
         }
 
         /// <summary>
