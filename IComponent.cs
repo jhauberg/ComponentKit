@@ -9,7 +9,7 @@ namespace ComponentKit {
     /// <summary>
     /// Defines a component of an entity.
     /// </summary>
-    public interface IComponent : ISynchronizable {
+    public interface IComponent : ISynchronizable, IDisposable {
         /// <summary>
         /// Gets or sets the entity that this component is attached to.
         /// </summary>
@@ -17,7 +17,7 @@ namespace ComponentKit {
         /// <summary>
         /// Receives a message containing arbitrary data.
         /// </summary>
-        void Receive<T>(string message, T data);
+        void Receive<TData>(string message, TData data);
     }
 }
 
