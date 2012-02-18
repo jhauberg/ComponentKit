@@ -31,7 +31,8 @@ namespace ComponentKit.Model {
                 return;
             }
 
-            List<Type> componentTypes = new List<Type>();
+            List<Type> componentTypes = 
+                new List<Type>();
 
             if (inheritFromDefinition != null && _definitions.ContainsKey(inheritFromDefinition)) {
                 componentTypes.AddRange(_definitions[inheritFromDefinition]);
@@ -39,7 +40,7 @@ namespace ComponentKit.Model {
 
             foreach (Type type in types) {
                 bool adheresToConstraints = 
-                    Component.IsComponent(type) && 
+                    Component.CanCreate(type) && 
                     type.GetConstructor(Type.EmptyTypes) != null &&
                     !componentTypes.Contains(type);
 

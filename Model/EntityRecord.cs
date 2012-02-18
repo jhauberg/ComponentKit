@@ -139,21 +139,21 @@ namespace ComponentKit.Model {
         /// </summary>
         public IComponent this[string componentNameOrType] {
             get {
-                return Registry == null ?
-                    null :
-                    Registry.GetComponent(this, Type.GetType(componentNameOrType));
+                return Registry != null ?
+                    Registry.GetComponent(this, Type.GetType(componentNameOrType)) :
+                    null;
             }
         }
         
         /// <summary>
         /// Broadcasts a message containing arbitrary data to all components attached to this entity.
         /// </summary>
-        public void Notify<T>(string message, T data) {
+        public void Notify<TData>(string message, TData data) {
             if (Registry == null) {
                 return;
             }
             
-            foreach (IComponent component in (this as IEntityRecord).GetComponents()) {
+            foreach (IComponent component in this.GetComponents()) {
                 component.Receive(message, data);
             }
         }
@@ -190,7 +190,7 @@ namespace ComponentKit.Model {
             string components = "";
 
             foreach (IComponent component in this) {
-                components += String.Format("{0}{1}, ", component.IsOutOfSync ? "*" : "", component.GetType().Name);
+                components += String.Format("{0}, ", component.ToString());
             }
 
             components = components.Remove(components.Length - 2);

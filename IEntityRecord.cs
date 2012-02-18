@@ -48,7 +48,7 @@ namespace ComponentKit {
         /// <summary>
         /// Notifies all attached components with a message containing arbitrary data.
         /// </summary>
-        void Notify<T>(string message, T data);
+        void Notify<TData>(string message, TData data);
     }
 }
 

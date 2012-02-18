@@ -174,8 +174,9 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity) where T : class, IComponent {
-            T component = default(T);
+        public TComponent GetComponent<TComponent>(IEntityRecord entity) 
+            where TComponent : class, IComponent {
+            TComponent component = default(TComponent);
 
             return GetComponent(entity, component);
         }
@@ -183,14 +184,15 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity, T component) where T : class, IComponent {
+        public TComponent GetComponent<TComponent>(IEntityRecord entity, TComponent component) 
+            where TComponent : class, IComponent {
             if (entity == null) {
-                return default(T);
+                return default(TComponent);
             }
 
             IDictionary<Type, IComponent> components = GetComponentsForRecord(entity);
 
-            T result = default(T);
+            TComponent result = default(TComponent);
 
             if (components != null && components.Count > 0) {
                 Type componentType = null;
@@ -198,11 +200,11 @@ namespace ComponentKit.Model {
                 if (component != null) {
                     componentType = component.GetType();
                 } else {
-                    componentType = typeof(T);
+                    componentType = typeof(TComponent);
                 }
 
                 if (components.ContainsKey(componentType)) {
-                    result = (T)components[componentType];
+                    result = (TComponent)components[componentType];
                 }
             }
 
@@ -258,15 +260,16 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns any component that is either a subclass of, or is, the specified type if it is attached to the entity.
         /// </summary>
-        public T GetComponent<T>(IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent {
+        public TComponent GetComponent<TComponent>(IEntityRecord entity, TComponent component, bool allowingDerivedTypes) 
+            where TComponent : class, IComponent {
             IDictionary<Type, IComponent> components = GetComponentsForRecord(entity);
 
-            T result = default(T);
+            TComponent result = default(TComponent);
 
             if (components != null && components.Count > 0) {
                 foreach (IComponent otherComponent in components.Values) {
-                    if (otherComponent is T) {
-                        result = (T)otherComponent;
+                    if (otherComponent is TComponent) {
+                        result = (TComponent)otherComponent;
 
                         break;
                     }

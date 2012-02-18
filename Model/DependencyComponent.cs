@@ -48,7 +48,7 @@ namespace ComponentKit.Model {
                             field.GetCustomAttributes(typeof(RequireComponentAttribute), false)) {
                     Type componentType = field.FieldType;
 
-                    if (IsComponent(componentType)) {
+                    if (CanCreate(componentType)) {
                         if (dependency.Automatically) {
                             if (componentType.GetConstructor(Type.EmptyTypes) == null) {
                                 throw new InvalidOperationException(
