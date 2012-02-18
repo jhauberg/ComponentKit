@@ -15,9 +15,10 @@
 
 /// ##Source
 using System;
-using System.Globalization;
 
 namespace ComponentKit.Model {
+
+
     /// <summary>
     /// Represents a single component of an entity.
     /// </summary>
@@ -56,6 +57,13 @@ namespace ComponentKit.Model {
                     }
                 }
             }
+        }
+
+        public override string ToString() {
+            return String.Format(
+                "{0}{1}", 
+                GetType().GetPrettyName(),
+                IsOutOfSync ? "*" : string.Empty);
         }
 
         /// <summary>
@@ -103,7 +111,29 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Receives a message from a containing arbitrary data.
         /// </summary>
-        public virtual void Receive<T>(string message, T data) { }
+        public virtual void Receive<TData>(string message, TData data) { }
+
+        /// > `IDisposable` pattern implementation as described in
+        /// [Game Engine Toolset Development](http://www.amazon.com/Engine-Toolset-Development-Graham-Wihlidal/dp/1592009638) by Graham Wihlidal.
+        ~Component() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) {
+            /// > Preventing any multi-threading issues by locking this instance.
+            /// Sub-classes should also lock, and should call `base.Dispose(disposing)` last, within the lock context.
+            lock (this) {
+                if (disposing) {
+                    
+                }
+            }
+        }
 
         /// <summary>
         /// Helper method to create an instance of a specified type, and casting it to `IComponent`
@@ -114,7 +144,7 @@ namespace ComponentKit.Model {
             try {
                 result = Activator.CreateInstance(type) as IComponent;
             } catch (MissingMethodException) {
-                throw new MissingMethodException(String.Format(CultureInfo.CurrentCulture,
+                throw new MissingMethodException(String.Format(
                     "The component type '{0}' does not provide a parameter-less constructor.", type.ToString()));
             }
 
@@ -124,11 +154,12 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Determines whether the given type implements the `IComponent` interface.
         /// </summary>
-        public static bool IsComponent(Type type) {
+        public static bool CanCreate(Type type) {
             Type[] matchingInterfaces = type.FindInterfaces(
                 IsTypeEqualToName, "ComponentKit.IComponent");
 
-            if (matchingInterfaces != null && matchingInterfaces.Length != 0) {
+            if (matchingInterfaces != null && 
+                matchingInterfaces.Length != 0) {
                 return true;
             }
 
