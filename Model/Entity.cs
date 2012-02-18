@@ -4,6 +4,7 @@
 
 /// ##Source
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ComponentKit.Model {
@@ -144,19 +145,60 @@ namespace ComponentKit.Model {
             return record;
         }
 
+        /// <summary>
+        /// Finds all entities in the active registry that have a component of the specified type attached to them.
+        /// </summary>
+        public static IEnumerable<IEntityRecord> FindAllWithComponent<TComponent>() 
+            where TComponent : class, IComponent {
+            return FindAllWithComponent<TComponent>(EntityRegistry.Current);
+        }
+
+        /// <summary>
+        /// Finds all entities in a registry that have a component of the specified type attached to them.
+        /// </summary>
+        public static IEnumerable<IEntityRecord> FindAllWithComponent<TComponent>(IEntityRecordCollection registry) 
+            where TComponent : class, IComponent {
+            return registry != null ? 
+                registry.Where(entity => 
+                    entity.HasComponent<TComponent>()) : 
+                null;
+        }
+
+        /// <summary>
+        /// Finds all entities in the active registry that have components of the specified types attached to them.
+        /// </summary>
+        public static IEnumerable<IEntityRecord> FindAllWithComponents<TComponentA, TComponentB>()
+            where TComponentA : class, IComponent
+            where TComponentB : class, IComponent {
+            return FindAllWithComponents<TComponentA, TComponentB>(EntityRegistry.Current);
+        }
+
+        /// <summary>
+        /// Finds all entities in a registry that have components of the specified types attached to them.
+        /// </summary>
+        public static IEnumerable<IEntityRecord> FindAllWithComponents<TComponentA, TComponentB>(IEntityRecordCollection registry)
+            where TComponentA : class, IComponent
+            where TComponentB : class, IComponent {
+            return registry != null ?
+                registry.Where(entity => 
+                    entity.HasComponent<TComponentA>() && 
+                    entity.HasComponent<TComponentB>()) :
+                null;
+        }
+
         /// ###Messaging
 
         /// <summary>
         /// Broadcasts a message to every single component that is currently attached to an entity in the active registry.
         /// </summary>
-        public static void Broadcast<T>(string message, T data) {
+        public static void Broadcast<TData>(string message, TData data) {
             Broadcast(EntityRegistry.Current, message, data);
         }
 
         /// <summary>
         /// Broadcasts a message to every single component that is currently attached to an entity in the specified registry.
         /// </summary>
-        public static void Broadcast<T>(IEntityRecordCollection registry, string message, T data) {
+        public static void Broadcast<TData>(IEntityRecordCollection registry, string message, TData data) {
             if (registry == null) {
                 return;
             }
@@ -211,34 +253,37 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity) where T : class, IComponent {
+        public static TComponent GetComponent<TComponent>(this IEntityRecord entity) 
+            where TComponent : class, IComponent {
             if (entity.Registry != null) {
-                return entity.Registry.GetComponent<T>(entity);
+                return entity.Registry.GetComponent<TComponent>(entity);
             }
 
-            return default(T);
+            return default(TComponent);
         }
 
         /// <summary>
         /// Returns a component of the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity, T component) where T : class, IComponent {
+        public static TComponent GetComponent<TComponent>(this IEntityRecord entity, TComponent component) 
+            where TComponent : class, IComponent {
             if (entity.Registry != null) {
                 return entity.Registry.GetComponent(entity, component);
             }
 
-            return default(T);
+            return default(TComponent);
         }
 
         /// <summary>
         /// If `allowingDerivedTypes` is `true`, returns any component that is either a subclass of, or is, the specified type if it is attached to this entity.
         /// </summary>
-        public static T GetComponent<T>(this IEntityRecord entity, T component, bool allowingDerivedTypes) where T : class, IComponent {
+        public static TComponent GetComponent<TComponent>(this IEntityRecord entity, TComponent component, bool allowingDerivedTypes) 
+            where TComponent : class, IComponent {
             if (entity.Registry != null) {
                 return entity.Registry.GetComponent(entity, component, allowingDerivedTypes);
             }
             
-            return default(T);
+            return default(TComponent);
         }
 
         /// <summary>
@@ -251,25 +296,15 @@ namespace ComponentKit.Model {
 
             return null;
         }
-        /*
-        public static IEnumerable<T> GetComponents<T>(this IEntityRecord entity) where T : class, IComponent {
-            IList<T> components = new List<T>();
-
-            foreach (IComponent component in entity) {
-                if (component is T) {
-                    components.Add(component as T);
-                }
-            }
-
-            return components;
-        }
-        */
-        public static bool HasComponent<T>(this IEntityRecord entity) where T : class, IComponent {
-            return GetComponent<T>(entity) != null;
+ 
+        public static bool HasComponent<TComponent>(this IEntityRecord entity) 
+            where TComponent : class, IComponent {
+            return GetComponent<TComponent>(entity) != null;
         }
 
-        public static bool HasComponent<T>(this IEntityRecord entity, T component) where T : class, IComponent {
-            return GetComponent<T>(entity, component) != null;
+        public static bool HasComponent<TComponent>(this IEntityRecord entity, TComponent component) 
+            where TComponent : class, IComponent {
+            return GetComponent<TComponent>(entity, component) != null;
         }
     }
 }
