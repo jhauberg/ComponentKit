@@ -62,6 +62,9 @@ namespace ComponentKit.Model {
 
         /// <summary>
         /// Attaches the specified component to an entity.
+        /// 
+        /// If a component of the same type is already attached to the entity, then nothing happens 
+        /// and the method returns false.
         /// </summary>
         public bool Add(IEntityRecord entity, IComponent component) {
             bool componentSuccessfullyAttached = false;
@@ -91,7 +94,7 @@ namespace ComponentKit.Model {
                 if (component != null) {
                     Type key = component.GetType();
 
-                    if (!components.ContainsKey(key)) {
+                    if (!entityWasAlreadyRegistered || !components.ContainsKey(key)) {
                         components.Add(key, component);
 
                         if (component.Record == null || !component.Record.Equals(entity)) {
@@ -344,7 +347,7 @@ namespace ComponentKit.Model {
             new Dictionary<ComponentSyncTriggerPredicate, EventHandler<ComponentSyncEventArgs>>();
 
         /// <summary>
-        /// Sets a trigger that fires on components matching the specified predicate.
+        /// Sets a trigger that fires when components matching the specified predicate are attached to entities.
         /// </summary>
         /// > Note that triggers are only run during synchronization operations.
         public void SetTrigger(ComponentSyncTriggerPredicate predicate, EventHandler<ComponentSyncEventArgs> handler) {
@@ -379,7 +382,8 @@ namespace ComponentKit.Model {
                         _desynchronizedComponents
                             .Where(component => trigger(component));
 
-                    if (components != null && components.Count() > 0) {
+                    if (components != null && 
+                        components.Count() > 0) {
                         _triggers[trigger](this, new ComponentSyncEventArgs(components));
                     }
                 }
