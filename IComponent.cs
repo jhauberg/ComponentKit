@@ -9,7 +9,7 @@ namespace ComponentKit {
     /// <summary>
     /// Defines a component of an entity.
     /// </summary>
-    public interface IComponent : ISynchronizable, IDisposable {
+    public interface IComponent : ISyncState, IDisposable {
         /// <summary>
         /// Gets or sets the entity that this component is attached to.
         /// </summary>

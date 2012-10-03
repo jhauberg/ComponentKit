@@ -17,8 +17,6 @@
 using System;
 
 namespace ComponentKit.Model {
-
-
     /// <summary>
     /// Represents a single component of an entity.
     /// </summary>
@@ -34,7 +32,7 @@ namespace ComponentKit.Model {
         /// Gets or sets the entity that this component is currently attached to.
         /// </summary>
         public IEntityRecord Record {
-            /// > The component is in an inconsistent state when the **Record** is not `null` 
+            /// > The component is in an inconsistent state when the **Record** is *not* `null` 
             /// but does not have the component attached to it.
             get {
                 return _record;
@@ -53,7 +51,11 @@ namespace ComponentKit.Model {
                         _previousRecord = _record;
                         _record = value;
 
-                        Synchronize();
+                        if (_record != null) {
+                            OnAdded(new ComponentStateEventArgs(_record, _previousRecord));
+                        } else {
+                            OnRemoved(new ComponentStateEventArgs(_record, _previousRecord));
+                        }
                     }
                 }
             }
@@ -78,27 +80,6 @@ namespace ComponentKit.Model {
         }
 
         /// <summary>
-        /// Ensures that the component becomes synchronized by establishing the appropriate relation to its parent entity.
-        /// </summary>
-        public void Synchronize() {
-            if (Record != null) {
-                if (!Record.HasComponent(this)) {
-                    Record.Add(this);
-
-                    OnAdded(new ComponentStateEventArgs(Record, _previousRecord));
-                }
-            } else {
-                if (_previousRecord != null) {
-                    if (_previousRecord.Remove(this)) {
-                        OnRemoved(new ComponentStateEventArgs(Record, _previousRecord));
-
-                        _previousRecord = null;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Occurs when the component is attached to an entity.
         /// </summary>
         protected virtual void OnAdded(ComponentStateEventArgs registrationArgs) { }
@@ -113,8 +94,9 @@ namespace ComponentKit.Model {
         /// </summary>
         public virtual void Receive<TData>(string message, TData data) { }
 
-        /// > `IDisposable` pattern implementation as described in
+        /// `IDisposable` pattern implementation as described in
         /// [Game Engine Toolset Development](http://www.amazon.com/Engine-Toolset-Development-Graham-Wihlidal/dp/1592009638) by Graham Wihlidal.
+        
         ~Component() {
             Dispose(disposing: false);
         }
