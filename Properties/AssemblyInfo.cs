@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ComponentKit")]
-[assembly: AssemblyDescription("An in-memory database of entity composites.")]
+[assembly: AssemblyDescription("An in-memory object database for entities composed by a set of components.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Jacob H. Hansen")]
+[assembly: AssemblyCompany("Jacob Hauberg Hansen")]
 [assembly: AssemblyProduct("ComponentKit")]
-[assembly: AssemblyCopyright("Copyright 2012 Jacob H. Hansen")]
+[assembly: AssemblyCopyright("Copyright 2012 Jacob Hauberg Hansen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
