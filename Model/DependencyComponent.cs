@@ -2,7 +2,6 @@
 /// 
 /// The `DependencyComponent` is a `Component` that is aware of its dependencies, 
 /// and will automatically attempt to inject them during synchronization.
-/// 
 
 /// ##Source
 using System;
@@ -15,6 +14,21 @@ namespace ComponentKit.Model {
     /// Represents a component that can specify and inject dependencies.
     /// </summary>
     public abstract class DependencyComponent : Component {
+        /// <summary>
+        /// Determines whether the given type is not a sub-class of `DependencyComponent`.
+        /// </summary>
+        static bool CanDependOn(Type type) {
+            /// > This may seem arbitrary, but when *behaviors* (i.e. `DependencyComponent`s) can only depend on 
+            /// *attributes* (i.e. `Component`s that primarily hold data) we have effectively eliminated any potential 
+            /// cyclic dependency/adding order issues.
+            /// 
+            /// Though there's nothing stopping `Component`s from having logic, enforcing this rule encourages the use 
+            /// of behavior/attribute convention when building components.
+            return
+                CanCreate(type);/* &&
+                !type.IsSubclassOf(typeof(DependencyComponent));*/
+        }
+
         Dictionary<FieldInfo, RequireComponentAttribute> _dependencies =
             new Dictionary<FieldInfo, RequireComponentAttribute>();
 
@@ -34,21 +48,35 @@ namespace ComponentKit.Model {
         void FindDependencies() {
             _dependencies.Clear();
 
+            Type type = GetType();
+
+            FindDependencies(type, _dependencies);
+            
+            while ((type = type.BaseType) != null) {
+                if (!Component.CanCreate(type)) {
+                    break;
+                }
+
+                FindDependencies(type, _dependencies);
+            }
+        }
+
+        void FindDependencies(Type type, Dictionary<FieldInfo, RequireComponentAttribute> deps) {
             /// > It wouldn't be complete insanity to ditch the attributing entirely 
             ///   and just consider all `IComponent`-types as dependencies. 
             /// But, it *would* ultimately be an assumption, and it could very well 
             /// lead to some *just what exactly is going on behind the scenes?*-confusion.
-            FieldInfo[] fields = GetType().GetFields(
+            FieldInfo[] fields = type.GetFields(
                 BindingFlags.Instance |
                 BindingFlags.Public |
                 BindingFlags.NonPublic);
-
+            
             foreach (FieldInfo field in fields) {
-                foreach (RequireComponentAttribute dependency in 
+                foreach (RequireComponentAttribute dependency in
                             field.GetCustomAttributes(typeof(RequireComponentAttribute), false)) {
                     Type componentType = field.FieldType;
 
-                    if (CanCreate(componentType)) {
+                    if (CanDependOn(componentType)) {
                         if (dependency.Automatically) {
                             if (componentType.GetConstructor(Type.EmptyTypes) == null) {
                                 throw new InvalidOperationException(
@@ -60,7 +88,7 @@ namespace ComponentKit.Model {
                     } else {
                         throw new InvalidOperationException(
                             String.Format(CultureInfo.InvariantCulture,
-                                "This field can not be marked as a dependency because its type does not implement 'IComponent'.",
+                                "This field can not be marked as a dependency because its type does not implement 'IComponent' or is a subclass of 'DependencyComponent'.",
                                 field.DeclaringType.ToString() + "." + field.Name));
                     }
 
@@ -92,6 +120,7 @@ namespace ComponentKit.Model {
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("" + this);
             foreach (KeyValuePair<FieldInfo, RequireComponentAttribute> pair in _dependencies) {
                 FieldInfo field = pair.Key;
                 RequireComponentAttribute dependency = pair.Value;
@@ -151,7 +180,7 @@ namespace ComponentKit.Model {
         /// Occurs when the component is dettached from an entity. All managed dependencies are null'ed.
         /// </summary>
         /// <remarks>
-        /// > If you don't want the dependencies to get lost, then override this method and don't base.
+        /// > If you don't want the dependencies to get lost, then override this method and don't call base.
         /// </remarks>
         protected override void OnRemoved(ComponentStateEventArgs registrationArgs) {
             base.OnRemoved(registrationArgs);
