@@ -51,10 +51,13 @@ namespace ComponentKit.Model {
                         _previousRecord = _record;
                         _record = value;
 
+                        ComponentStateEventArgs stateChange = 
+                            new ComponentStateEventArgs(_record, _previousRecord);
+
                         if (_record != null) {
-                            OnAdded(new ComponentStateEventArgs(_record, _previousRecord));
+                            OnAdded(stateChange);
                         } else {
-                            OnRemoved(new ComponentStateEventArgs(_record, _previousRecord));
+                            OnRemoved(stateChange);
                         }
                     }
                 }
@@ -78,16 +81,27 @@ namespace ComponentKit.Model {
                     !Record.HasComponent(this);
             }
         }
-
+        
+        public event EventHandler<ComponentStateEventArgs> Added;
+        public event EventHandler<ComponentStateEventArgs> Removed;
+        
         /// <summary>
         /// Occurs when the component is attached to an entity.
         /// </summary>
-        protected virtual void OnAdded(ComponentStateEventArgs registrationArgs) { }
+        protected virtual void OnAdded(ComponentStateEventArgs registrationArgs) {
+            if (Added != null) {
+                Added(this, registrationArgs);
+            }
+        }
 
         /// <summary>
         /// Occurs when the component is dettached from an entity.
         /// </summary>
-        protected virtual void OnRemoved(ComponentStateEventArgs registrationArgs) { }
+        protected virtual void OnRemoved(ComponentStateEventArgs registrationArgs) {
+            if (Removed != null) {
+                Removed(this, registrationArgs);
+            }
+        }
 
         /// <summary>
         /// Receives a message from a containing arbitrary data.
