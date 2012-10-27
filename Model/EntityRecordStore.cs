@@ -45,7 +45,11 @@ namespace ComponentKit.Model {
 
             lock (_keyhole) {
                 if (components != null && components.Count > 0) {
-                    foreach (IComponent component in components.Values) {
+                    ICollection<IComponent> values = components.Values;
+
+                    for (int i = values.Count - 1; i > 0; i--) {
+                        IComponent component = values.ElementAt(i);
+
                         Remove(entity, component);
                     }
                 }
@@ -380,11 +384,13 @@ namespace ComponentKit.Model {
                     /// Discovers all components that matches the predicate described by the `trigger`
                     IEnumerable<IComponent> components =
                         _desynchronizedComponents
-                            .Where(component => trigger(component));
+                            .Where(component => 
+                                trigger(component));
 
                     if (components != null && 
                         components.Count() > 0) {
-                        _triggers[trigger](this, new ComponentSyncEventArgs(components));
+                        _triggers[trigger](this, 
+                            new ComponentSyncEventArgs(components));
                     }
                 }
 
