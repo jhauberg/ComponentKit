@@ -47,7 +47,7 @@ namespace ComponentKit.Model {
                 if (components != null && components.Count > 0) {
                     ICollection<IComponent> values = components.Values;
 
-                    for (int i = values.Count - 1; i > 0; i--) {
+                    for (int i = values.Count - 1; i >= 0; i--) {
                         IComponent component = values.ElementAt(i);
 
                         Remove(entity, component);
