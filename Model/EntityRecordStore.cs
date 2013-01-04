@@ -253,7 +253,8 @@ namespace ComponentKit.Model {
 
             if (components != null && components.Count > 0) {
                 foreach (IComponent otherComponent in components.Values) {
-                    if (otherComponent.GetType().IsEquivalentTo(componentType)) {
+                    if ((allowingDerivedTypes && otherComponent.GetType().IsSubclassOf(componentType))
+                        || otherComponent.GetType() == componentType) {
                         result = otherComponent;
 
                         break;
