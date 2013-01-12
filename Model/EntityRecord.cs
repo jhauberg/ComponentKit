@@ -5,7 +5,6 @@
 
 /// ##Source
 using System;
-using System.Dynamic;
 using System.Collections.Generic;
 
 namespace ComponentKit.Model {
