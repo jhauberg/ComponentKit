@@ -6,6 +6,7 @@
 /// ##Source
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ComponentKit.Model {
     /// <summary>
@@ -186,15 +187,31 @@ namespace ComponentKit.Model {
         }
 
         public override string ToString() {
-            string components = "";
+            string formattedEntity = null;
 
-            foreach (IComponent component in this) {
-                components += String.Format("{0}, ", component.ToString());
+            if (this.GetComponents().Count() > 0) {
+                const string componentSeparator = ", ";
+                string formattedComponents = "";
+
+                foreach (IComponent component in this) {
+                    formattedComponents += String.Format(
+                        "{0}{1}",
+                        component.ToString(),
+                        componentSeparator);
+                }
+
+                if (formattedComponents.EndsWith(componentSeparator)) {
+                    formattedComponents = formattedComponents.Remove(formattedComponents.Length - 2);
+                }
+
+                formattedEntity = String.Format(
+                    "'{0}': {{ {1} }}", Name, formattedComponents);
+            } else {
+                formattedEntity = String.Format(
+                    "'{0}'", Name);
             }
 
-            components = components.Remove(components.Length - 2);
-
-            return String.Format("'{0}': {{ {1} }}", Name, components);
+            return formattedEntity;
         }
     }
 }
