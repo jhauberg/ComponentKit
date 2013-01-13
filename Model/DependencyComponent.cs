@@ -120,7 +120,6 @@ namespace ComponentKit.Model {
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine("" + this);
             foreach (KeyValuePair<FieldInfo, RequireComponentAttribute> pair in _dependencies) {
                 FieldInfo field = pair.Key;
                 RequireComponentAttribute dependency = pair.Value;
