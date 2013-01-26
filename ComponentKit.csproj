@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="IEntityDefinitionCollection.cs" />
     <Compile Include="Model\Component.cs" />
+    <Compile Include="Model\ComponentExtensions.cs" />
     <Compile Include="Model\DependencyComponent.cs" />
     <Compile Include="Model\ComponentStateEventArgs.cs" />
     <Compile Include="ISyncState.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="EntityEventArgs.cs" />
     <Compile Include="Model\EntityDefinitions.cs" />
     <Compile Include="Model\EntityRecord.cs" />
+    <Compile Include="Model\EntityRecordExtensions.cs" />
     <Compile Include="Model\EntityRecordStore.cs" />
     <Compile Include="Model\EntityRegistry.cs" />
     <Compile Include="IComponent.cs" />

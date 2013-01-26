@@ -201,7 +201,7 @@ namespace ComponentKit.Model {
                 }
 
                 if (formattedComponents.EndsWith(componentSeparator)) {
-                    formattedComponents = formattedComponents.Remove(formattedComponents.Length - 2);
+                    formattedComponents = formattedComponents.Remove(formattedComponents.Length - componentSeparator.Length);
                 }
 
                 formattedEntity = String.Format(
