@@ -116,11 +116,31 @@ namespace ComponentKit.Model {
             return _definitions.Make(definition);
         }
 
+        public static IEntityRecord CreateFromDefinition(string definition, params IComponent[] components) {
+            IEntityRecord entity = CreateFromDefinition(definition);
+
+            foreach (IComponent component in components) {
+                entity.Add(component);
+            }
+
+            return entity;
+        }
+
         /// <summary>
         /// Creates an entity from the specified definition and registers it in the active registry.
         /// </summary>
         public static IEntityRecord CreateFromDefinition(string definition, string name) {
             return _definitions.Make(definition, Create(name));
+        }
+
+        public static IEntityRecord CreateFromDefinition(string definition, string name, params IComponent[] components) {
+            IEntityRecord entity = _definitions.Make(definition, Create(name));
+
+            foreach (IComponent component in components) {
+                entity.Add(component);
+            }
+
+            return entity;
         }
 
         /// ###Retrieval
