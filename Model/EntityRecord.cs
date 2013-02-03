@@ -189,11 +189,13 @@ namespace ComponentKit.Model {
         public override string ToString() {
             string formattedEntity = null;
 
-            if (this.GetComponents().Count() > 0) {
+            IEnumerable<IComponent> components = this.GetComponents();
+
+            if (components != null && components.Count() > 0) {
                 const string componentSeparator = ", ";
                 string formattedComponents = "";
 
-                foreach (IComponent component in this) {
+                foreach (IComponent component in components) {
                     formattedComponents += String.Format(
                         "{0}{1}",
                         component.ToString(),
