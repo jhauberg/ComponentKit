@@ -151,15 +151,7 @@ namespace ComponentKit.Model {
         /// Determines whether the given type implements the `IComponent` interface.
         /// </summary>
         public static bool CanCreate(Type type) {
-            Type[] matchingInterfaces = type.FindInterfaces(
-                IsTypeEqualToName, "ComponentKit.IComponent");
-
-            if (matchingInterfaces != null && 
-                matchingInterfaces.Length != 0) {
-                return true;
-            }
-
-            return false;
+          return typeof(IComponent).IsAssignableFrom(type);
         }
 
         /// <summary>
