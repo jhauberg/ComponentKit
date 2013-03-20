@@ -153,17 +153,6 @@ namespace ComponentKit.Model {
         public static bool CanCreate(Type type) {
           return typeof(IComponent).IsAssignableFrom(type);
         }
-
-        /// <summary>
-        /// Determines whether the given string filter is equal to the name of the type.
-        /// </summary>
-        static bool IsTypeEqualToName(Type m, object filterCriteria) {
-            if (filterCriteria is string) {
-                return m.FullName == (string)filterCriteria;
-            }
-
-            return false;
-        }
     }
 }
 
