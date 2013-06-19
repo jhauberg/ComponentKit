@@ -14,19 +14,27 @@ This here kit is useful if you need to model something like this:
 
 ## Usage
 
-Defining entities is easy:
+Create an entity:
 
 ```C#
+IEntityRecord dragon = 
+    Entity.Create("A firebreathing dragon!",
+        typeof(Health),
+        typeof(FireBreathing));
+```
+
+You can also define entities to easily create them later:
+
+```C#
+Entity.Define("Dragon",
+    typeof(Health));
+
 Entity.Define("Player",
     typeof(Health),
     typeof(Combustible));
-
-Entity.Define("Dragon",
-    typeof(Health),
-    typeof(FireBreathing));
 ```
 
-And creating instances of them works like so:
+And then later:
 
 ```C#
 IEntityRecord player =
@@ -35,7 +43,8 @@ IEntityRecord player =
 
 IEntityRecord dragon =
     Entity.CreateFromDefinition(
-        "Dragon", "A Firebreathing dragon!");
+        "Dragon", "A Firebreathing dragon!",
+        typeof(FireBreathing));
 ```
 
 When you want to manage and handle specific components separately, you set triggers. Like this:
@@ -174,9 +183,16 @@ for (int turn = 0; turn < 10; turn++) {
 }
 ```
 
+#### Examples
+
+For more examples of usage, check out these repositories:
+
+ - [shrt/Fruitless](https://github.com/shrt/Fruitless)
+ - [ambient92/Calcifer](https://github.com/ambient92/Calcifer)
+
 ## License
 
-	Copyright 2012 Jacob Hauberg Hansen.
+	Copyright 2013 Jacob Hauberg Hansen.
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of
 	this software and associated documentation files (the "Software"), to deal in
