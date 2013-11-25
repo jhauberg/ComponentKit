@@ -19,8 +19,8 @@ Create an entity:
 ```C#
 IEntityRecord dragon = 
     Entity.Create("A firebreathing dragon!",
-        typeof(Health),
-        typeof(FireBreathing));
+        new Health()),
+        new FireBreathing()));
 ```
 
 You can also define entities to easily create them later:
@@ -44,7 +44,7 @@ IEntityRecord player =
 IEntityRecord dragon =
     Entity.CreateFromDefinition(
         "Dragon", "A Firebreathing dragon!",
-        typeof(FireBreathing));
+        new FireBreathing()));
 ```
 
 When you want to manage and handle specific components separately, you set triggers. Like this:
