@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Componentkit : An in-memory object database for entities composed by a set of components." />
+    <meta name="description" content="ComponentKit : An in-memory object database for entities composed by a set of components." />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Componentkit</title>
+    <title>ComponentKit</title>
   </head>
 
   <body>
@@ -18,7 +18,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/jhauberg/ComponentKit">View on GitHub</a>
 
-          <h1 id="project_title">Componentkit</h1>
+          <h1 id="project_title">ComponentKit</h1>
           <h2 id="project_tagline">An in-memory object database for entities composed by a set of components.</h2>
 
             <section id="downloads">
@@ -31,44 +31,228 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="componentkit" class="anchor" href="#componentkit"><span class="octicon octicon-link"></span></a>ComponentKit</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>This here kit is useful if you need to model something like this:</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<pre><code>------------------------------------------------------------------------
+|          | Position | Health | Flying | Fire Breathing | Combustible |
+------------------------------------------------------------------------
+| "Player" |    x     |   X    |        |                |      x      |
+| "Dragon" |    x     |   X    |   x    |       x        |             |
+------------------------------------------------------------------------
+     ^                             ^
+  Unique entities      composed of arbitrary behaviors.
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Create an entity:</p>
+
+<div class="highlight highlight-C#"><pre><span class="n">IEntityRecord</span> <span class="n">dragon</span> <span class="p">=</span> 
+    <span class="n">Entity</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">"A firebreathing dragon!"</span><span class="p">,</span>
+        <span class="k">new</span> <span class="nf">Health</span><span class="p">()),</span>
+        <span class="k">new</span> <span class="nf">FireBreathing</span><span class="p">()));</span>
+</pre></div>
+
+<p>You can also define entities to easily create them later:</p>
+
+<div class="highlight highlight-C#"><pre><span class="n">Entity</span><span class="p">.</span><span class="n">Define</span><span class="p">(</span><span class="s">"Dragon"</span><span class="p">,</span>
+    <span class="k">typeof</span><span class="p">(</span><span class="n">Health</span><span class="p">));</span>
+
+<span class="n">Entity</span><span class="p">.</span><span class="n">Define</span><span class="p">(</span><span class="s">"Player"</span><span class="p">,</span>
+    <span class="k">typeof</span><span class="p">(</span><span class="n">Health</span><span class="p">),</span>
+    <span class="k">typeof</span><span class="p">(</span><span class="n">Combustible</span><span class="p">));</span>
+</pre></div>
+
+<p>And then later:</p>
+
+<div class="highlight highlight-C#"><pre><span class="n">IEntityRecord</span> <span class="n">player</span> <span class="p">=</span>
+    <span class="n">Entity</span><span class="p">.</span><span class="n">CreateFromDefinition</span><span class="p">(</span>
+        <span class="s">"Player"</span><span class="p">,</span> <span class="s">"You!"</span><span class="p">);</span>
+
+<span class="n">IEntityRecord</span> <span class="n">dragon</span> <span class="p">=</span>
+    <span class="n">Entity</span><span class="p">.</span><span class="n">CreateFromDefinition</span><span class="p">(</span>
+        <span class="s">"Dragon"</span><span class="p">,</span> <span class="s">"A Firebreathing dragon!"</span><span class="p">,</span>
+        <span class="k">new</span> <span class="nf">FireBreathing</span><span class="p">()));</span>
+</pre></div>
+
+<p>When you want to manage and handle specific components separately, you set triggers. Like this:</p>
+
+<div class="highlight highlight-C#"><pre><span class="n">List</span><span class="p">&lt;</span><span class="n">Combustible</span><span class="p">&gt;</span> <span class="n">combustibles</span> <span class="p">=</span> 
+    <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Combustible</span><span class="p">&gt;();</span>
+
+<span class="n">EntityRegistry</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">SetTrigger</span><span class="p">(</span>
+    <span class="n">component</span> <span class="p">=&gt;</span> <span class="n">component</span> <span class="k">is</span> <span class="n">Combustible</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">eventArgs</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">IComponent</span> <span class="n">component</span> <span class="k">in</span> <span class="n">eventArgs</span><span class="p">.</span><span class="n">Components</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Combustible</span> <span class="n">combustible</span> <span class="p">=</span> <span class="n">component</span> <span class="k">as</span> <span class="n">Combustible</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">combustible</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">combustible</span><span class="p">.</span><span class="n">IsOutOfSync</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">combustibles</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">combustible</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">combustibles</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">combustible</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>But don't forget to commit the changes. Otherwise the triggers <strong>will not</strong> be run:</p>
+
+<div class="highlight highlight-C#"><pre><span class="n">EntityRegistry</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Synchronize</span><span class="p">();</span>
+</pre></div>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="components" class="anchor" href="#components"><span class="octicon octicon-link"></span></a>Components</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>They come in 2 shapes:</p>
+
+<ul>
+<li>
+<strong>Component</strong>: Basic component that can be attached to any entity. Can provide behavior or just data.</li>
+<li>
+<strong>DependencyComponent</strong>: Like the Component, but can specify a dependence on other components.</li>
+</ul><p>A very basic component could look like this:</p>
+
+<div class="highlight highlight-C#"><pre><span class="k">class</span> <span class="nc">Health</span> <span class="p">:</span> <span class="n">Component</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="nf">Health</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Amount</span> <span class="p">=</span> <span class="m">100</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsDead</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Amount</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Amount</span> <span class="p">{</span> 
+        <span class="k">get</span><span class="p">;</span> 
+        <span class="k">set</span><span class="p">;</span> 
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Some components need to interact with others, take this one for example:</p>
+
+<div class="highlight highlight-C#"><pre><span class="k">class</span> <span class="nc">Combustible</span> <span class="p">:</span> <span class="n">DependencyComponent</span> <span class="p">{</span>
+<span class="na">    [RequireComponent]</span>
+    <span class="n">Health</span> <span class="n">_health</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsBurning</span> <span class="p">{</span> 
+        <span class="k">get</span><span class="p">;</span> 
+        <span class="k">private</span> <span class="k">set</span><span class="p">;</span> 
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Combust</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">IsBurning</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Extinguish</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">IsBurning</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Burn</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">_health</span><span class="p">.</span><span class="n">Amount</span> <span class="p">-=</span> <span class="m">10</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Common for all components is that they have to be handled by you. The firebreathing dragon does not breathe fire until it is told to. Usually this is handled through a trigger or similar system.</p>
+
+<div class="highlight highlight-C#"><pre><span class="k">class</span> <span class="nc">FireBreathing</span> <span class="p">:</span> <span class="n">DependencyComponent</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Breathe</span><span class="p">(</span><span class="n">IEntityRecord</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">HasComponent</span><span class="p">&lt;</span><span class="n">Combustible</span><span class="p">&gt;())</span> <span class="p">{</span>
+            <span class="n">target</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Combustible</span><span class="p">&gt;().</span><span class="n">Combust</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="more" class="anchor" href="#more"><span class="octicon octicon-link"></span></a>More</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>When you're ready to make stuff happen, you go like this:</p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<div class="highlight highlight-C#"><pre><span class="n">dragon</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">FireBreathing</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">Breathe</span><span class="p">(</span><span class="n">player</span><span class="p">);</span>
+</pre></div>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>You could even put some real action in:</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<div class="highlight highlight-C#"><pre><span class="n">Random</span> <span class="n">r</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Random</span><span class="p">();</span>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">turn</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">turn</span> <span class="p">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">turn</span><span class="p">++)</span> <span class="p">{</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="n">Combustible</span> <span class="n">combustible</span> <span class="k">in</span> <span class="n">combustibles</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">combustible</span><span class="p">.</span><span class="n">IsBurning</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">combustible</span><span class="p">.</span><span class="n">Burn</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Combustible</span> <span class="n">fire</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Combustible</span><span class="p">&gt;();</span>
+    <span class="n">Health</span> <span class="n">condition</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Health</span><span class="p">&gt;();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fire</span><span class="p">.</span><span class="n">IsBurning</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// There's a 10% chance that the player figures out how to extinguish himself!</span>
+        <span class="kt">bool</span> <span class="n">playerStoppedDroppedAndRolled</span> <span class="p">=</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">Next</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span> <span class="p">&lt;=</span> <span class="m">10</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">playerStoppedDroppedAndRolled</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fire</span><span class="p">.</span><span class="n">Extinguish</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">.</span><span class="n">IsDead</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Unfortunately for the player, he did not figure it out in time.</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h4>
+
+<p>For more examples of usage, check out these repositories:</p>
+
+<ul>
+<li><a href="https://github.com/shrt/Fruitless">shrt/Fruitless</a></li>
+<li><a href="https://github.com/ambient92/Calcifer">ambient92/Calcifer</a></li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<pre><code>Copyright 2013 Jacob Hauberg Hansen.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+This part is in all uppercase. 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+http://en.wikipedia.org/wiki/MIT_License
+</code></pre>
       </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Componentkit maintained by <a href="https://github.com/jhauberg">jhauberg</a></p>
+        <p class="copyright">ComponentKit maintained by <a href="https://github.com/jhauberg">jhauberg</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
