@@ -187,12 +187,12 @@ for (int turn = 0; turn < 10; turn++) {
 
 For more examples of usage, check out these repositories:
 
- - [shrt/Fruitless](https://github.com/shrt/Fruitless)
+ - [jhauberg/Fruitless](https://github.com/jhauberg/Fruitless)
  - [ambient92/Calcifer](https://github.com/ambient92/Calcifer)
 
 ## License
 
-	Copyright 2013 Jacob Hauberg Hansen.
+	Copyright 2014 Jacob Hauberg Hansen.
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy of
 	this software and associated documentation files (the "Software"), to deal in
