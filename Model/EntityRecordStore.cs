@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// Too bad, because this part is missing right now ^_^
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -354,7 +349,9 @@ namespace ComponentKit.Model {
         /// <summary>
         /// Sets a trigger that fires when components matching the specified predicate are attached to entities.
         /// </summary>
-        /// > Note that triggers are only run during synchronization operations.
+        /// <remarks>
+        /// Note that triggers are only run during synchronization operations.
+        /// </remarks>
         public void SetTrigger(ComponentSyncTriggerPredicate predicate, EventHandler<ComponentSyncEventArgs> handler) {
             lock (_keyhole) {
                 _triggers[predicate] = handler;
@@ -400,5 +397,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

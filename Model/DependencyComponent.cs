@@ -1,10 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// The `DependencyComponent` is a `Component` that is aware of its dependencies, 
-/// and will automatically attempt to inject them during synchronization.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Globalization;
@@ -13,12 +7,15 @@ namespace ComponentKit.Model {
     /// <summary>
     /// Represents a component that can specify and inject dependencies.
     /// </summary>
+    /// <remarks>
+    /// The `DependencyComponent` is a `Component` that is aware of its dependencies, and will automatically attempt to inject them during synchronization.
+    /// </remarks>
     public abstract class DependencyComponent : Component {
         /// <summary>
         /// Determines whether the given type is not a sub-class of `DependencyComponent`.
         /// </summary>
         static bool CanDependOn(Type type) {
-            /// > This may seem arbitrary, but when *behaviors* (i.e. `DependencyComponent`s) can only depend on 
+            /// This may seem arbitrary, but when *behaviors* (i.e. `DependencyComponent`s) can only depend on 
             /// *attributes* (i.e. `Component`s that primarily hold data) we have effectively eliminated any potential 
             /// cyclic dependency/adding order issues.
             /// 
@@ -62,8 +59,8 @@ namespace ComponentKit.Model {
         }
 
         void FindDependencies(Type type, Dictionary<FieldInfo, RequireComponentAttribute> deps) {
-            /// > It wouldn't be complete insanity to ditch the attributing entirely 
-            ///   and just consider all `IComponent`-types as dependencies. 
+            /// It wouldn't be complete insanity to ditch the attributing entirely 
+            /// and just consider all `IComponent`-types as dependencies. 
             /// But, it *would* ultimately be an assumption, and it could very well 
             /// lead to some *just what exactly is going on behind the scenes?*-confusion.
             FieldInfo[] fields = type.GetFields(
@@ -150,7 +147,7 @@ namespace ComponentKit.Model {
         /// Attempts to inject a component into a field, and adds the component to the specified entity.
         /// </summary>
         /// <remarks>
-        /// > Note that the dependency will remain, even if it becomes dettached from its entity.
+        /// Note that the dependency will remain, even if it becomes dettached from its entity.
         /// </remarks>
         void InjectDependency(FieldInfo field, IEntityRecord record, bool allowingDerivedTypes) {
             if (field == null || record == null) {
@@ -179,7 +176,7 @@ namespace ComponentKit.Model {
         /// Occurs when the component is dettached from an entity. All managed dependencies are null'ed.
         /// </summary>
         /// <remarks>
-        /// > If you don't want the dependencies to get lost, then override this method and don't call base.
+        /// If you don't want the dependencies to get lost, then override this method and don't call base.
         /// </remarks>
         protected override void OnRemoved(ComponentStateEventArgs registrationArgs) {
             base.OnRemoved(registrationArgs);
@@ -199,5 +196,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

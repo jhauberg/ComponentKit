@@ -1,15 +1,13 @@
-﻿/// ###TL;DR..
-/// 
-/// Definitions are like prefabs, or blueprints, except without default properties.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ComponentKit.Model {
     /// <summary>
     /// Represents a set of definitions, each describing the composition of an entity.
     /// </summary>
+    /// <remarks>
+    /// Definitions are like prefabs, or blueprints, except without default properties.
+    /// </remarks>
     internal class EntityDefinitions : IEntityDefinitionCollection<string> {
         IDictionary<string, IList<Type>> _definitions =
             new Dictionary<string, IList<Type>>();
@@ -79,7 +77,7 @@ namespace ComponentKit.Model {
         /// Creates a new entity from the specified definition.
         /// </summary>
         public IEntityRecord Make(string definition) {
-            /// > Note that `Entity.Create()` automatically picks a unique name for the entity.
+            /// Note that `Entity.Create()` automatically picks a unique name for the entity.
             return Make(definition, Entity.Create());
         }
         
@@ -97,7 +95,7 @@ namespace ComponentKit.Model {
                 try {
                     entity.Add(Component.Create(componentType));
                 } catch (InvalidOperationException) {
-                    /// > A component that doesn't provide a parameter-less constructor will fail instantiation. 
+                    /// A component that doesn't provide a parameter-less constructor will fail instantiation. 
                     /// If that is the case, skip it.
                     continue;
                 }
@@ -115,5 +113,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

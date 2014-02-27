@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// When an event involves a specific entity, these are used.
-
-/// ##Source
-using System;
+﻿using System;
 
 namespace ComponentKit {
     /// <summary>
@@ -26,5 +21,3 @@ namespace ComponentKit {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

@@ -1,14 +1,9 @@
-﻿/// ###TL;DR..
-/// 
-/// Too bad, because this part is missing right now ^_^
-
-/// ##Source
-using System;
+﻿using System;
 using System.Text;
 
 namespace ComponentKit {
     internal static class TypeExtensions {
-        /// > See http://stackoverflow.com/a/401824/144433
+        /// See http://stackoverflow.com/a/401824/144433
         public static string GetPrettyName(this Type type) {
             bool isArray = false;
 
@@ -55,5 +50,3 @@ namespace ComponentKit {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// Convenience methods to reduce the amount of necessary boilerplate code.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -15,15 +10,11 @@ namespace ComponentKit.Model {
         static readonly IEntityDefinitionCollection<string> _definitions = 
             new EntityDefinitions();
 
-        /// ###Manipulation
+        /// ### Manipulation
         
         /// <summary>
         /// Creates and registers an entity in the active registry.
         /// </summary>
-        /// <remarks>
-        /// > This *active registry* is going to be mentioned often. 
-        /// But all it is, is a static property that can be changed and will always fall back to the default registry when null'ed. See `EntityRegistry` for more of that stuff.
-        /// </remarks>
         public static IEntityRecord Create(string name) {
             return Create(name, EntityRegistry.Current);
         }
@@ -143,7 +134,7 @@ namespace ComponentKit.Model {
             return entity;
         }
 
-        /// ###Retrieval
+        /// ### Retrieval
 
         /// <summary>
         /// Attempts to find the entity that matches the specified name in the active registry. Returns `null` if none was found.
@@ -206,7 +197,7 @@ namespace ComponentKit.Model {
                 null;
         }
 
-        /// ###Messaging
+        /// ### Messaging
 
         /// <summary>
         /// Broadcasts a message to every single component that is currently attached to an entity in the active registry.
@@ -229,5 +220,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// Lets you group components together, so you can later spawn them all in one line.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ComponentKit {
@@ -38,5 +33,3 @@ namespace ComponentKit {
         IEntityRecord Make(TEntityDefinition definition, IEntityRecord entity);
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

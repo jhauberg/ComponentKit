@@ -1,16 +1,11 @@
-﻿/// ###TL;DR..
-/// 
-/// When a component switches entity, these are used.
-
-/// ##Source
-using System;
+﻿using System;
 
 namespace ComponentKit.Model {
     /// <summary>
     /// Provides the entities involved in a change of state for a component.
     /// </summary>
     /// <remarks>
-    /// > For example, when components are **added** or **removed** these `EventArgs` will be provided. 
+    /// For example, when components are **added** or **removed** these `EventArgs` will be provided. 
     /// </remarks>
     public class ComponentStateEventArgs : EntityEventArgs {
         public ComponentStateEventArgs(IEntityRecord entity)
@@ -39,5 +34,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

@@ -1,38 +1,25 @@
-﻿/// ###TL;DR..
-/// 
-/// The `Component` is sub-classed to build custom behavior.
-/// 
-/// ####Processing
-/// 
-/// Triggers can be used to intercept when components are attached/dettached from entities, 
-/// which makes it easy to add special processing for specific types of components.
-/// 
-/// ####Staying n'sync
-/// 
-/// A component becomes out-of-sync when it is no longer attached to an `IEntityRecord`. Triggers, however, 
-/// are not guaranteed to be notified of this immediately. For example, the default implementation of 
-/// `IEntityRecordCollection` only execute triggers during sync operations.
-
-/// ##Source
-using System;
+﻿using System;
 
 namespace ComponentKit.Model {
     /// <summary>
     /// Represents a single component of an entity.
     /// </summary>
+    /// <remarks>
+    /// The `Component` is sub-classed to build custom behavior.
+    /// </remarks>
     public abstract class Component : IComponent {
         /// It can only have one immediate parent.
         IEntityRecord _record;
 
         /// It does keep track of its previous parent though, if any.
-        /// > Note that this is an implementation detail and is not exposed through the interface.
+        /// Note that this is an implementation detail and is not exposed through the interface.
         IEntityRecord _previousRecord;
 
         /// <summary>
         /// Gets or sets the entity that this component is currently attached to.
         /// </summary>
         public IEntityRecord Record {
-            /// > The component is in an inconsistent state when the **Record** is *not* `null` 
+            /// The component is in an inconsistent state when the **Record** is *not* `null` 
             /// but does not have the component attached to it.
             get {
                 return _record;
@@ -122,7 +109,7 @@ namespace ComponentKit.Model {
         }
 
         protected virtual void Dispose(bool disposing) {
-            /// > Preventing any multi-threading issues by locking this instance.
+            /// Preventing any multi-threading issues by locking this instance.
             /// Sub-classes should also lock, and should call `base.Dispose(disposing)` last, within the lock context.
             lock (this) {
                 if (disposing) {
@@ -155,5 +142,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

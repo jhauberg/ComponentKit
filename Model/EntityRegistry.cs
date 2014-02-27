@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// Too bad, because this part is missing right now ^_^
-
-/// ##Source
-using System;
+﻿using System;
 
 namespace ComponentKit.Model {
     /// <summary>
@@ -40,5 +35,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

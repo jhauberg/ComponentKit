@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// A component only has one really important attribute. The parent entity.
-
-/// ##Source
-using System;
+﻿using System;
 
 namespace ComponentKit {
     /// <summary>
@@ -20,5 +15,3 @@ namespace ComponentKit {
         void Receive<TData>(string message, TData data);
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

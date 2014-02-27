@@ -1,10 +1,4 @@
-﻿/// ###TL;DR..
-
-/// This concrete implementation of `IEntityRecord` is a **struct**, and uses its **Name** property 
-/// to determine equality.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -92,7 +86,7 @@ namespace ComponentKit.Model {
         /// Creates a new entity with the specified name.
         /// </summary>
         /// <remarks>
-        /// > The entity will be out-of-sync until it has a registry, so this constructor is usually only used 
+        /// The entity will be out-of-sync until it has a registry, so this constructor is usually only used 
         /// when you need to query the registry for a certain entity (since its name == its identity).
         /// </remarks>
         public EntityRecord(string name)
@@ -217,5 +211,3 @@ namespace ComponentKit.Model {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

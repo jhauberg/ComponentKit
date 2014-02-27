@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// When a bunch of components requires processing from **trigger handlers**, these are used.
-
-/// ##Source
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -48,5 +43,3 @@ namespace ComponentKit {
         }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.

@@ -1,9 +1,4 @@
-﻿/// ###TL;DR..
-/// 
-/// Too bad, because this part is missing right now ^_^
-
-/// ##Source
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ComponentKit {
@@ -16,7 +11,7 @@ namespace ComponentKit {
         /// </summary>
         bool Contains(IEntityRecord entity);
 
-        /// ###Manipulation
+        /// ### Manipulation
         
         /// <summary>
         /// Registers an entity.
@@ -35,7 +30,7 @@ namespace ComponentKit {
         /// </summary>
         bool Remove(IEntityRecord entity, IComponent component);
 
-        /// ###Events
+        /// ### Events
 
         /// <summary>
         /// Occurs when a new entity is registered.
@@ -46,7 +41,7 @@ namespace ComponentKit {
         /// </summary>
         event EventHandler<EntityEventArgs> Removed;
 
-        /// ###Triggers
+        /// ### Triggers
 
         /// Triggers allow you to intercept components that have changed state during a synchronization operation.
 
@@ -59,7 +54,7 @@ namespace ComponentKit {
         /// </summary>
         void ClearTrigger(ComponentSyncTriggerPredicate predicate);
 
-        /// ###Component retrieval
+        /// ### Component retrieval
 
         /// <summary>
         /// Returns a component of the specified type if it is attached to the entity.
@@ -96,5 +91,3 @@ namespace ComponentKit {
         IEnumerable<IComponent> this[IEntityRecord entity] { get; }
     }
 }
-
-/// Copyright 2012 Jacob H. Hansen.
