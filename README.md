@@ -47,7 +47,7 @@ IEntityRecord dragon =
         new FireBreathing()));
 ```
 
-When you want to manage and handle specific components separately, you set triggers. Like this:
+When you want to manage and handle specific components separately, you can set triggers. Like this:
 
 ```C#
 List<Combustible> combustibles = 
